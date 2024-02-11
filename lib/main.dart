@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map_essay/doctorsList.dart';
 import 'package:flutter_map_essay/map.dart';
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MapEssay(),
+      home: const DoctorsList(),
     );
   }
 }

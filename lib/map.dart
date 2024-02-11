@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapEssay extends StatefulWidget {
   const MapEssay({super.key});
@@ -12,7 +12,7 @@ class MapEssay extends StatefulWidget {
   State<MapEssay> createState() => _MapEssayState();
 }
 
-int mode = 0;
+
 List<List<String>> doctorsList = [
   [
     "A",
@@ -32,13 +32,18 @@ List<List<String>> doctorsList = [
 ];
 
 MapController _mapController = MapController();
+List<dynamic> c = <dynamic>[];
+Marker? m;
+List<Marker> markers = <Marker>[];
+int mode = 0;
 // Modify _location to accept a callback function
 void _location(String address, Function(List<double>) onLocationFound) async {
   List<Location> locations = await locationFromAddress(address);
   if (locations.isNotEmpty) {
     double latitude = locations[0].latitude;
     double longitude = locations[0].longitude;
-    onLocationFound([latitude, longitude]); // Call the callback with coordinates
+    onLocationFound(
+        [latitude, longitude]); // Call the callback with coordinates
   } else {
     print("Unable to retrieve coordinates for the given address.");
     onLocationFound([]); // Call the callback with empty coordinates
@@ -69,9 +74,8 @@ _buildMarkers() {
   }
   return markers;
 }
-List<dynamic> c = <dynamic>[];
-Marker? m ;
-List <Marker>markers = <Marker>[];
+
+
 List _specificMark(String target) {
   for (int i = 0; i < doctorsList.length; i++) {
     var doctorName = doctorsList[i][0];
@@ -82,7 +86,7 @@ List _specificMark(String target) {
           c.add(coordinates[0]);
           c.add(coordinates[1]);
           m = Marker(
-            point: LatLng(coordinates[0],coordinates[1]),
+            point: LatLng(coordinates[0], coordinates[1]),
             builder: (context) {
               return Icon(
                 Icons.medical_services,
@@ -91,7 +95,7 @@ List _specificMark(String target) {
             },
           );
           markers.add(Marker(
-            point: LatLng(coordinates[0],coordinates[1]),
+            point: LatLng(coordinates[0], coordinates[1]),
             builder: (context) {
               return Icon(
                 Icons.medical_services,
@@ -118,7 +122,7 @@ List _specificMark(String target) {
 List<Marker> _BuildSpecificMark() {
   List<Marker> specificMarkers = <Marker>[];
   print(m.toString());
-  if (m!=null) {
+  if (m != null) {
     specificMarkers.add(m!);
     return specificMarkers;
   } else {
@@ -126,10 +130,6 @@ List<Marker> _BuildSpecificMark() {
     return specificMarkers;
   }
 }
-
-
-
-
 
 /*_location(String address) async {
   LatLng point = LatLng(35.29280246371011, -1.1240494389160105);
@@ -168,12 +168,9 @@ List<Marker> _buildMarkers()  {
   return markers;
 }*/
 
-
-
 TextEditingController _textController = TextEditingController();
+
 class _MapEssayState extends State<MapEssay> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,24 +188,24 @@ class _MapEssayState extends State<MapEssay> {
             urlTemplate: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: ['a', 'b', 'c'],
           ),
-          MarkerLayer(markers: mode == 0 ? _buildMarkers() : _BuildSpecificMark()),
+          MarkerLayer(
+              markers: mode == 0 ? _buildMarkers() : _BuildSpecificMark()),
         ],
       ),
       floatingActionButton: _buildFloatingActionButtons(),
     );
-
-
-
   }
+
   Widget _buildFloatingActionButtons() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 70,),
+        SizedBox(
+          height: 70,
+        ),
         Container(
           color: Colors.white,
           margin: EdgeInsets.all(50),
-
           child: TextField(
             controller: _textController,
             onChanged: (value) {
@@ -223,7 +220,6 @@ class _MapEssayState extends State<MapEssay> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-
                   onPressed: () async {
                     setState(() {
                       mode = 1;
