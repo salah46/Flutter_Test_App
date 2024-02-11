@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map_essay/doctorsList.dart';
-import 'package:flutter_map_essay/map.dart';
+
 
 void main() {
   runApp(const MyApp());

@@ -5,9 +5,6 @@ import 'package:flutter_map_essay/doctorsList.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-
-
-
 class DoctorPage extends StatefulWidget {
   final Doctor doctor;
 
@@ -34,29 +31,28 @@ class _DoctorPageState extends State<DoctorPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-
                   Container(
                     child: CircleAvatar(
                       radius: 120,
                       backgroundImage: NetworkImage(url),
                     ),
                   ),
-                  Text(widget.doctor.name,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-
+                  Text(
+                    widget.doctor.name,
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       CircleAvatar(
                         radius: 30,
-                        child: IconButton(style:ButtonStyle(
-
-                        ),
+                        child: IconButton(
+                            style: ButtonStyle(),
                             onPressed: () {
                               _makeMailTo('garroudjimohamedse@gmail.com');
                             },
                             icon: Icon(
-                              Icons.email,
-
+                              Icons.alternate_email,
                             )),
                       ),
                       CircleAvatar(
@@ -73,11 +69,20 @@ class _DoctorPageState extends State<DoctorPage> {
                         radius: 30,
                         child: IconButton(
                             onPressed: () {
-                              _openGoogleMapsWithAddress();
+                              _makeSms(widget.doctor.phoneNumber);
+                            },
+                            icon: Icon(
+                              Icons.sms,
+                            )),
+                      ),
+                      CircleAvatar(
+                        radius: 30,
+                        child: IconButton(
+                            onPressed: () {
+                              _openGoogleMapsWithAddress(widget.doctor.address);
                             },
                             icon: Icon(
                               Icons.location_city,
-
                             )),
                       ),
                     ],
@@ -88,39 +93,40 @@ class _DoctorPageState extends State<DoctorPage> {
             Expanded(
                 // flex: 2,
                 child: Container(
-
-                  // decoration: BoxDecoration(
-                  //   color: Colors.blue,
-                  //   borderRadius: BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)), // Adjust the radius as needed
-                  // ),
-                  child: Column(
-
-                    crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
+              // decoration: BoxDecoration(
+              //   color: Colors.blue,
+              //   borderRadius: BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)), // Adjust the radius as needed
+              // ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   Container(
-                      margin: EdgeInsets.only(top: 20,),
-                      child: Text(" About me",style: TextStyle(fontSize: 32,fontWeight: FontWeight.bold))),
-
-                Container(
+                      margin: EdgeInsets.only(
+                        top: 20,
+                      ),
+                      child: Text(" About me",
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold))),
+                  Container(
                     margin: EdgeInsets.all(10),
                     child: Text(
-                        "\n"
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                    ,style:TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black87,
-                      letterSpacing: 0.5,
-                      wordSpacing: 2.0,
-                      decorationThickness: 2.0,
-                    ),),
+                      "\n"
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black87,
+                        letterSpacing: 0.5,
+                        wordSpacing: 2.0,
+                        decorationThickness: 2.0,
+                      ),
+                    ),
                   )
-              ],
-            ),
-                ))
+                ],
+              ),
+            ))
           ],
         ),
       ),
@@ -134,21 +140,25 @@ class _DoctorPageState extends State<DoctorPage> {
     );
     await launchUrl(launchUri);
   }
-  Future<void> _makeMailTo(String mailAddress) async{
+
+  Future<void> _makeMailTo(String mailAddress) async {
     final Uri launchUri = Uri(
       scheme: 'mailto',
       path: mailAddress,
     );
     await launchUrl(launchUri);
   }
-  _openGoogleMapsWithAddress() async{
-    MapsLauncher.launchQuery("3 Bd Ambroise Brugière, 63100 Clermont-Ferrand, France");
+
+  _openGoogleMapsWithAddress(String address) async {
+    MapsLauncher.launchQuery(address);
     // MapsLauncher.launchCoordinates(37.4220041, -122.0862462);
-
   }
 
-
+  Future<void> _makeSms(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'sms',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
-
-
-
+}
