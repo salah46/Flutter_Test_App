@@ -52,7 +52,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               _makeMailTo('garroudjimohamedse@gmail.com');
                             },
                             icon: Icon(
-                              Icons.alternate_email,
+                              Icons.mail,
                             )),
                       ),
                       CircleAvatar(
@@ -82,7 +82,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               _openGoogleMapsWithAddress(widget.doctor.address);
                             },
                             icon: Icon(
-                              Icons.location_city,
+                              Icons.map_sharp,
                             )),
                       ),
                     ],
@@ -134,11 +134,12 @@ class _DoctorPageState extends State<DoctorPage> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: '',
-      path: phoneNumber,
-    );
-    await launchUrl(launchUri);
+       final url = 'tel:$phoneNumber';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Future<void> _makeMailTo(String mailAddress) async {
