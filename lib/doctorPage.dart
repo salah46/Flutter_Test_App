@@ -134,7 +134,7 @@ class _DoctorPageState extends State<DoctorPage> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
-       final url = 'tel:$phoneNumber';
+    final url = 'tel:$phoneNumber';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
