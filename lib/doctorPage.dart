@@ -63,6 +63,7 @@ class _DoctorPageState extends State<DoctorPage> {
                                 _makeMailTo('garroudjimohamedse@gmail.com');
                               },
                               icon: Icon(
+                                color:Colors.white,
                                 Icons.mail,
                               )),
                         ),
@@ -152,6 +153,7 @@ class _DoctorPageState extends State<DoctorPage> {
   }
 
   Future<void> _makePhoneCall(String phoneNumber) async {
+
     final url = 'tel:$phoneNumber';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
@@ -167,6 +169,7 @@ class _DoctorPageState extends State<DoctorPage> {
 
     );
     await launchUrl(launchUri);
+
   }
 
   _openGoogleMapsWithAddress(String address) async {

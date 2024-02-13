@@ -4,6 +4,7 @@ class Doctor {
   final String phoneNumber;
 
   Doctor( {required this.phoneNumber,required this.name, required this.address});
+
   static final List<Doctor> doctors = [
     Doctor(
       name: 'Dr. John Doe',
