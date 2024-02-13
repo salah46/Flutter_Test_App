@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -57,7 +56,9 @@ class _DoctorPageState extends State<DoctorPage> {
                       children: [
                         CircleAvatar(
                           radius: 30,
+                          backgroundColor: Colors.blue,
                           child: IconButton(
+
                               style: ButtonStyle(),
                               onPressed: () {
                                 _makeMailTo('garroudjimohamedse@gmail.com');
