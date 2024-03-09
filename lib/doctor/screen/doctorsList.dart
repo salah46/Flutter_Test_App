@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_essay/doctorPage.dart';
+import 'package:flutter_map_essay/doctor/screen/doctorPage.dart';
 
-import 'doctor.dart';
+import '../model/doctor.dart';
 
 class DoctorsList extends StatefulWidget {
   const DoctorsList({Key? key}) : super(key: key);
