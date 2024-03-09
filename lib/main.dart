@@ -1,8 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map_essay/doctorsList.dart';
+import 'package:flutter_map_essay/firebase_options.dart';
+import 'package:flutter_map_essay/services.dart';
+import 'package:flutter_map_essay/test.dart';
 
-
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  initServices();
   runApp(const MyApp());
 }
 
@@ -13,8 +22,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo', 
-      
+      navigatorKey: navigatorKey,
+      title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -27,10 +36,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const DoctorsList(),
+      home: const Test(),
     );
   }
 }
-
-
-

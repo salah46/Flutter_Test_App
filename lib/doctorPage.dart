@@ -6,16 +6,15 @@ import 'doctor.dart';
 
 class DoctorPage extends StatefulWidget {
   final Doctor doctor;
+  final String url;
 
-  const DoctorPage({Key? key, required this.doctor}) : super(key: key);
+  const DoctorPage(  {Key? key, required this.doctor, required this.url}) : super(key: key);
 
   @override
   State<DoctorPage> createState() => _DoctorPageState();
 }
 
 class _DoctorPageState extends State<DoctorPage> {
-  var url =
-      'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZG9jdG9yfGVufDB8fDB8fHww';
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class _DoctorPageState extends State<DoctorPage> {
 
                       child: CircleAvatar(
                         radius: 120,
-                        backgroundImage: NetworkImage(url),
+                        backgroundImage: NetworkImage(widget.url),
                       ),
                     ),
                     Text(

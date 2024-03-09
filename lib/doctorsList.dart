@@ -33,7 +33,7 @@ class _DoctorsListState extends State<DoctorsList> {
             subtitle: Text(doctor.address),
             onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return DoctorPage(doctor: doctor);
+                  return DoctorPage(doctor: doctor,url: url);
                 },));
             },
           ),
