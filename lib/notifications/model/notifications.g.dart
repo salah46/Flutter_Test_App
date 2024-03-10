@@ -19,7 +19,7 @@ class NotificationsAdapter extends TypeAdapter<Notifications> {
     return Notifications(
       title: fields[0] as String,
       body: fields[1] as String,
-      time: fields[2] as dynamic,
+      times: (fields[2] as List).cast<DateTime>(),
     );
   }
 
@@ -32,7 +32,7 @@ class NotificationsAdapter extends TypeAdapter<Notifications> {
       ..writeByte(1)
       ..write(obj.body)
       ..writeByte(2)
-      ..write(obj.time);
+      ..write(obj.times);
   }
 
   @override

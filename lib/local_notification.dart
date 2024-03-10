@@ -119,31 +119,37 @@ tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
   return scheduleDate;
 }
 
-Future<void> scheduledPeriodicNotification(
+Future<void> scheduledPeriodicNotificationDaily(
     {required int id,
     required String title,
     required String body,
+    required String tag,
     required DateTime time}) async {
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
     body,
     _convertTime(time),
-    const NotificationDetails(
+    NotificationDetails(
       android: AndroidNotificationDetails(
+      
         'your channel id',
         'your channel name',
         channelDescription: 'your channel description',
         importance: Importance.max,
         priority: Priority.high,
+        tag: tag
       ),
+
     ),
+    
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
     matchDateTimeComponents: DateTimeComponents.time,
     //payload: 'It could be anything you pass',
   );
+  
 }
 
 Future<void> schedulePeriodicNotifications(
@@ -152,6 +158,7 @@ Future<void> schedulePeriodicNotifications(
     required String body,
     required RepeatInterval repeatInterval}) async {
   await flutterLocalNotificationsPlugin.periodicallyShow(
+    
     id,
     title,
     body,
@@ -165,6 +172,7 @@ Future<void> schedulePeriodicNotifications(
 Future<NotificationDetails> notificationDetails() async {
   return const NotificationDetails(
     android: AndroidNotificationDetails('channelId', 'channelName',
+        
         importance: Importance.max),
     iOS: DarwinNotificationDetails(),
   );

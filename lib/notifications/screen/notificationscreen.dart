@@ -42,6 +42,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             child: Text("empty"),
           )
         : GridView.builder(
+            shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
             ),
@@ -55,7 +56,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Text(
                             notifications.title,
                             style: Theme.of(context).textTheme.headline6,
@@ -65,15 +66,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           children: [
                             IconButton(
                                 onPressed: () async {
-                                  if (notifications.key != null) {
-                                    await flutterLocalNotificationsPlugin
-                                        .cancel(notifications.key);
+                                  for (var i = 0;
+                                      i < notifications.times.length;
+                                      i++) {
+                                    if (notifications.key != null) {
+                                      await flutterLocalNotificationsPlugin
+                                          .cancel(notifications.key,
+                                              tag: "${notifications.key}_$i");
+                                    }
                                   }
-                                  boxNotifications.delete(notifications.key);
-
+                                  if (notifications.key != null) {
+                                    boxNotifications.delete(notifications.key);
+                                  }
                                   setState(() {});
                                 },
-                                icon: Icon(Icons.delete)),
+                                icon: const Icon(Icons.delete)),
                             IconButton(
                                 onPressed: () {
                                   scheduleNotification(
@@ -81,18 +88,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       title: notifications.title,
                                       body: notifications.body,
                                       scheduledNotificationDateTime:
-                                          notifications.time);
+                                          notifications.times[index]);
                                   setState(() {});
                                 },
-                                icon: Icon(Icons.schedule))
+                                icon: const Icon(Icons.schedule))
                           ],
                         )
                       ],
                     ),
-                    Text(
-                      notifications.time.toString(),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
+                    for (var i = 0; i < notifications.times.length; i++)
+                      Text(
+                        notifications.times[i].toString(),
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     Text(
                       notifications.body,
                       style: Theme.of(context).textTheme.bodyText1,
