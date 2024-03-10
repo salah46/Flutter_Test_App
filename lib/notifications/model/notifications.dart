@@ -14,5 +14,5 @@ class Notifications extends HiveObject {
   String body;
   @HiveField(2)
   dynamic time;
-  
+  //
 }
