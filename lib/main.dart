@@ -22,6 +22,7 @@ main() async {
   tz.initializeTimeZones();
 
   runApp(const MyApp());
+  
 }
 
 class MyApp extends StatelessWidget {

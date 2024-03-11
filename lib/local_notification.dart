@@ -101,10 +101,13 @@ Future scheduleNotification({
 //       id, title, body,RepeatInterval.daily , await notificationDetails());
 }
 
+
+
 tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
-  final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+  final tz.Location timeZone = tz.getLocation('Africa/Algiers'); // Use Algiers time zone
+  final tz.TZDateTime now = tz.TZDateTime.now(timeZone);
   tz.TZDateTime scheduleDate = tz.TZDateTime(
-    tz.local,
+    timeZone,
     scheduledNotificationDateTime.year,
     scheduledNotificationDateTime.month,
     scheduledNotificationDateTime.day,
@@ -115,9 +118,10 @@ tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
   if (scheduleDate.isBefore(now)) {
     scheduleDate = scheduleDate.add(const Duration(days: 1));
   }
-
+  print('The scheduled time is: ${scheduleDate}');
   return scheduleDate;
 }
+
 
 Future<void> scheduledPeriodicNotificationDaily(
     {required int id,
@@ -132,24 +136,19 @@ Future<void> scheduledPeriodicNotificationDaily(
     _convertTime(time),
     NotificationDetails(
       android: AndroidNotificationDetails(
-      
-        'your channel id',
-        'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        tag: tag
-      ),
-
+          'your channel id', 'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          tag: tag),
     ),
-    
+
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
     matchDateTimeComponents: DateTimeComponents.time,
     //payload: 'It could be anything you pass',
   );
-  
 }
 
 Future<void> schedulePeriodicNotifications(
@@ -158,7 +157,6 @@ Future<void> schedulePeriodicNotifications(
     required String body,
     required RepeatInterval repeatInterval}) async {
   await flutterLocalNotificationsPlugin.periodicallyShow(
-    
     id,
     title,
     body,
@@ -172,7 +170,6 @@ Future<void> schedulePeriodicNotifications(
 Future<NotificationDetails> notificationDetails() async {
   return const NotificationDetails(
     android: AndroidNotificationDetails('channelId', 'channelName',
-        
         importance: Importance.max),
     iOS: DarwinNotificationDetails(),
   );
