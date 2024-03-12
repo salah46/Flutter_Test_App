@@ -19,18 +19,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title:Text("Notifications"),
         actions: [
           IconButton(
             onPressed: () async {
               await showMyDialog(context);
-              title = "Notifications";
+              
 
               setState(() {});
             },
             icon: const Icon(Icons.add),
           )
         ],
-        title: Text(title),
+        
       ),
       body: _buildNotificationsList(),
     );
@@ -81,6 +82,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   setState(() {});
                                 },
                                 icon: const Icon(Icons.delete)),
+                            // Need modofications    
                             IconButton(
                                 onPressed: () {
                                   scheduleNotification(

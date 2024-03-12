@@ -1,21 +1,27 @@
 // ignore_for_file: unused_local_variable, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_map_essay/fcm.dart';
 import 'package:flutter_map_essay/hive_boxes.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'local_notification.dart';
 import 'notifications/model/notifications.dart';
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+
+
+
 
 initServices() async {
+  FireBaseMessageService.initFcmService();
+
   initializeNotification();
   catchUpdateInFirestore();
 }
 
-void catchUpdateInFirestore() {
+catchUpdateInFirestore(){
   FirebaseFirestore.instance
       .collection("Notifications")
       .where("isShowed", isEqualTo: 0)
@@ -41,5 +47,6 @@ void catchUpdateInFirestore() {
 Future<void> hiveInit() async {
   await Hive.initFlutter();
   Hive.registerAdapter(NotificationsAdapter());
-boxNotifications = await Hive.openBox<Notifications>('userBox');
+  boxNotifications = await Hive.openBox<Notifications>('userBox');
 }
+

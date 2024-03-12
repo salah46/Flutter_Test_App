@@ -1,8 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map_essay/services.dart';
 import 'package:timezone/timezone.dart' as tz;
-
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+late AndroidNotificationChannel channel;
 // Initialize local notifications
 void initializeNotification() {
   flutterLocalNotificationsPlugin
@@ -44,12 +48,10 @@ Future<void> showNotification(String title, String body) async {
       priority: Priority.high,
       actions: [
         AndroidNotificationAction(
-          'accept',
-          'Accept',
+          'show',
+          'Show',
           showsUserInterface: true,
         ),
-        AndroidNotificationAction('decline', 'Decline',
-            showsUserInterface: true)
       ]);
   var platformChannelSpecifics = NotificationDetails(
     android: androidPlatformChannelSpecifics,
@@ -66,7 +68,7 @@ Future<void> showNotification(String title, String body) async {
 // Handle notification response
 @pragma('vm:entry-point')
 void notificationResponse(NotificationResponse notificationResponse) {
-  if (notificationResponse.actionId == "accept" &&
+  if (notificationResponse.actionId == "show" &&
       navigatorKey.currentContext != null) {
     // Route to page when "accept" action is clicked
     Navigator.push(
@@ -96,15 +98,11 @@ Future scheduleNotification({
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
   );
-
-//   flutterLocalNotificationsPlugin.(
-//       id, title, body,RepeatInterval.daily , await notificationDetails());
 }
 
-
-
 tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
-  final tz.Location timeZone = tz.getLocation('Africa/Algiers'); // Use Algiers time zone
+  final tz.Location timeZone =
+      tz.getLocation('Africa/Algiers'); // Use Algiers time zone
   final tz.TZDateTime now = tz.TZDateTime.now(timeZone);
   tz.TZDateTime scheduleDate = tz.TZDateTime(
     timeZone,
@@ -122,8 +120,7 @@ tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
   return scheduleDate;
 }
 
-
-Future<void> scheduledPeriodicNotificationDaily(
+Future<void> scheduledSpecificPeriodicNotificationDaily(
     {required int id,
     required String title,
     required String body,
