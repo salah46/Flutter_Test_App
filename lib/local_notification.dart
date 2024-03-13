@@ -121,33 +121,38 @@ tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
   return scheduleDate;
 }
 
-Future<void> scheduledSpecificPeriodicNotificationDaily(
-    {required int id,
-    required String title,
-    required String body,
-    required String tag,
-    required DateTime time}) async {
+Future<void> scheduledSpecificPeriodicNotificationDaily({
+  required int id,
+  required String title,
+  required String body,
+  required String tag,
+  required DateTime dateBegin,
+  required DateTime dateEnd,
+}) async {
+  //calcluate the deffrence between current day and the dateBegin in milleseconds
+  DateTime currentDate = DateTime.now();
+  int deffrenceCurrentDateBegin =
+      dateBegin.difference(currentDate).inMilliseconds;
+  //calcluate the deffrence between dateBeign day and the dateEnd in milleseconds
+  int deffrenceDateBeginDateEnd = dateEnd.difference(dateBegin).inMilliseconds;
 
-    //calcluate the deffrence between current day and the schedule in milleseconds  
-    DateTime currentDate = DateTime.now();
-    int deffrence = time.difference(currentDate).inMilliseconds;  
+  //do the sum to know the total length of the period
+  int deffrence = deffrenceCurrentDateBegin + deffrenceDateBeginDateEnd;
 
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
     body,
-    _convertTime(time),
+    _convertTime(dateBegin),
     NotificationDetails(
-      android: AndroidNotificationDetails(
-          
-          'your channel id', 'your channel name',
-          channelDescription: 'your channel description',
-          importance: Importance.max,
-          priority: Priority.high,
-          timeoutAfter:deffrence , // effect the timer 
-          tag: tag),
+      android:
+          AndroidNotificationDetails('your channel id', 'your channel name',
+              channelDescription: 'your channel description',
+              importance: Importance.max,
+              priority: Priority.high,
+              timeoutAfter: deffrence, // effect the timer
+              tag: tag),
     ),
-    
 
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
@@ -155,7 +160,6 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
     matchDateTimeComponents: DateTimeComponents.time,
     //payload: 'It could be anything you pass',
   );
-  
 }
 
 Future<void> schedulePeriodicNotifications(
