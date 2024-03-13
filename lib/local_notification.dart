@@ -128,8 +128,10 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
     required String tag,
     required DateTime time}) async {
 
+    //calcluate the deffrence between current day and the schedule in milleseconds  
     DateTime currentDate = DateTime.now();
     int deffrence = time.difference(currentDate).inMilliseconds;  
+
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
@@ -142,7 +144,7 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
           channelDescription: 'your channel description',
           importance: Importance.max,
           priority: Priority.high,
-          timeoutAfter:deffrence ,
+          timeoutAfter:deffrence , // effect the timer 
           tag: tag),
     ),
     
