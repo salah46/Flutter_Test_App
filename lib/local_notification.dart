@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map_essay/services.dart';
 import 'package:timezone/timezone.dart' as tz;
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 late AndroidNotificationChannel channel;
@@ -126,6 +127,9 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
     required String body,
     required String tag,
     required DateTime time}) async {
+
+    DateTime currentDate = DateTime.now();
+    int deffrence = time.difference(currentDate).inMilliseconds;  
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
     title,
@@ -133,12 +137,15 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
     _convertTime(time),
     NotificationDetails(
       android: AndroidNotificationDetails(
+          
           'your channel id', 'your channel name',
           channelDescription: 'your channel description',
           importance: Importance.max,
           priority: Priority.high,
+          timeoutAfter:deffrence ,
           tag: tag),
     ),
+    
 
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
@@ -146,6 +153,7 @@ Future<void> scheduledSpecificPeriodicNotificationDaily(
     matchDateTimeComponents: DateTimeComponents.time,
     //payload: 'It could be anything you pass',
   );
+  
 }
 
 Future<void> schedulePeriodicNotifications(

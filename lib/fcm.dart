@@ -29,7 +29,7 @@ class FireBaseMessageService {
     listenFCM();
 
     // Send test push message
-    sendPushMessage(token!, "Hello", 'body text');
+    // sendPushMessage(token!, "Hello", 'body text');
 
     // Enable auto initialization
     await instance.setAutoInitEnabled(true);
@@ -50,7 +50,7 @@ class FireBaseMessageService {
     await getTheToken(instance);
     if (token != null) {
       await storeTokenInFirebaseFirestore(token!);
-      sendPushMessage(token!, "Hello", 'body text'); //ot for the sender
+    //  sendPushMessage(token!, "Hello", 'body text'); //ot for the sender
     }
 
     loadFCM();
@@ -166,38 +166,47 @@ Future<void> backgroundMessageHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null && !kIsWeb) {
-    showNotification(notification.title!, notification.body!);
-    if (navigatorKey.currentContext != null) {
-      Navigator.push(
-        navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (context) => const DoctorsList()),
-      );
-    }
-  }
-}
-
-void listenFCM() async {
-  // Foreground message handling
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("the app is in the foreground  not terminated");
-    if (message.notification != null &&
-        message.notification!.android != null &&
-        !kIsWeb) {
-      RemoteNotification? notification = message.notification;
-      showNotification(notification!.title!, notification.body!);
-      // any action here will be excute after the notifications
-    }
-  });
-
-  // When the app is in the background but not terminated
-  FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    print('you click the onMessageOpenedApp');
+    print(
+        "======================================the app is in the background  not terminated");
+    String token = "";
+    await FirebaseMessaging.instance.getToken().then((value) {
+      token = value!;
+    });
+  // sendPushMessage(token, "Hello", 'background');
+    // showNotification(notification.title!, notification.body!);
     // if (navigatorKey.currentContext != null) {
     //   Navigator.push(
     //     navigatorKey.currentContext!,
     //     MaterialPageRoute(builder: (context) => const DoctorsList()),
     //   );
     // }
+  }
+}
+
+void listenFCM() async {
+  // Foreground message handling
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    print(
+        "======================================the app is in the foreground  not terminated");
+      RemoteNotification? notification = message.notification;
+    //  sendPushMessage(token, "Hello", 'background');
+       showNotification(notification!.title!, notification.body!);
+      // any action here will be excute after the notifications
+     print(
+        "======================================${message.data}");
+    
+  });
+
+  // When the app is in the background but not terminated
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print(
+        '######################################you click the onMessageOpenedApp');
+    if (navigatorKey.currentContext != null) {
+      Navigator.push(
+        navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (context) => const DoctorsList()),
+      );
+    }
   });
 
   // Background message handling

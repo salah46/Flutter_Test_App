@@ -72,7 +72,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       i++) {
                                     if (notifications.key != null) {
                                       await flutterLocalNotificationsPlugin
-                                          .cancel(notifications.key,
+                                          .cancel(notifications.key +i,
                                               tag: "${notifications.key}_$i");
                                     }
                                   }

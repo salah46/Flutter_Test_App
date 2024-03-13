@@ -82,7 +82,7 @@ class _MyDialogState extends State<MyDialog> {
             //     title: item.title,
             //     body: item.body,
             //     scheduledNotificationDateTime: item.time);
-            for (int i = 0; i < datetimes.length; i++) {
+            for (int i = 0; i < datetimes.length;i++) {
               int id = item.key + i;
               print("$id");
               scheduledSpecificPeriodicNotificationDaily(
