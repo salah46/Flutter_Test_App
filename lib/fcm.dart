@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map_essay/doctor/screen/doctorsList.dart';
 import 'package:flutter_map_essay/local_notification.dart';
-import 'package:flutter_map_essay/services.dart';
 import 'package:flutter_map_essay/tokenacces.dart';
 import 'package:http/http.dart' as http;
 
@@ -166,13 +165,12 @@ Future<void> backgroundMessageHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
   if (notification != null && android != null && !kIsWeb) {
-    print(
-        "======================================the app is in the background  not terminated");
+    print("======================================the app is in the background  not terminated");
     String token = "";
     await FirebaseMessaging.instance.getToken().then((value) {
       token = value!;
     });
-  // sendPushMessage(token, "Hello", 'background');
+    // sendPushMessage(token, "Hello", 'background');
     // showNotification(notification.title!, notification.body!);
     // if (navigatorKey.currentContext != null) {
     //   Navigator.push(

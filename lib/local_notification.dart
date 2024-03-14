@@ -129,15 +129,8 @@ Future<void> scheduledSpecificPeriodicNotificationDaily({
   required DateTime dateBegin,
   required DateTime dateEnd,
 }) async {
-  //calcluate the deffrence between current day and the dateBegin in milleseconds
-  DateTime currentDate = DateTime.now();
-  int deffrenceCurrentDateBegin =
-      dateBegin.difference(currentDate).inMilliseconds;
-  //calcluate the deffrence between dateBeign day and the dateEnd in milleseconds
-  int deffrenceDateBeginDateEnd = dateEnd.difference(dateBegin).inMilliseconds;
-
-  //do the sum to know the total length of the period
-  int deffrence = deffrenceCurrentDateBegin + deffrenceDateBeginDateEnd;
+  // Calculate timeoutAfter to be a reasonable duration after the notification is displayed
+  int timeoutAfterMilliseconds = dateEnd.difference(dateBegin).inMilliseconds;
 
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
@@ -145,20 +138,38 @@ Future<void> scheduledSpecificPeriodicNotificationDaily({
     body,
     _convertTime(dateBegin),
     NotificationDetails(
-      android:
-          AndroidNotificationDetails('your channel id', 'your channel name',
-              channelDescription: 'your channel description',
-              importance: Importance.max,
-              priority: Priority.high,
-              timeoutAfter: deffrence, // effect the timer
-              tag: tag),
+      android: AndroidNotificationDetails(
+        'your channel id',
+        'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        timeoutAfter: timeoutAfterMilliseconds,
+        tag: tag,
+      ),
     ),
-
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
     matchDateTimeComponents: DateTimeComponents.time,
-    //payload: 'It could be anything you pass',
+    payload: dateEnd
+        .toString(), // Store dateEnd in payload to be used for cancellation
+  );
+
+  // Schedule cancellation after dateEnd
+  tz.TZDateTime scheduledTime = tz.TZDateTime.from(dateEnd, tz.local);
+  await flutterLocalNotificationsPlugin.zonedSchedule(
+    id,
+    '',
+    '',
+    scheduledTime.add(Duration(seconds: 1)), // Schedule 1 second after dateEnd
+    NotificationDetails(),
+    androidAllowWhileIdle: true,
+    uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime,
+    matchDateTimeComponents: DateTimeComponents.time,
+    payload:
+        'cancel', // Use a different payload to identify cancellation notification
   );
 }
 
