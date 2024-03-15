@@ -91,7 +91,7 @@ class _MyDialogState extends State<MyDialog> {
                   title: item.title,
                   body: item.body,
                   dateBegin: datetimes[i],
-                  dateEnd: DateTime(2024, 3, 15, 13, 8, 0));
+                  dateEnd: DateTime(2024, 3, 15, 17, 23, 0));
               print("########################");
             }
 

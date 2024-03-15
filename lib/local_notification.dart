@@ -6,9 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map_essay/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+
+import 'main.dart';
+import 'notifications/model/notifications.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -255,13 +259,24 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 // }
 
 @pragma('vm:entry-point')
-void cancelNotifications(int id) {
+void cancelNotifications(int id) async {
   final DateTime now = DateTime.now();
   final int isolateId = Isolate.current.hashCode;
   flutterLocalNotificationsPlugin.cancel(id);
-  print("[$now] CancelNotifications! isolate=${isolateId} function='$cancelNotifications'");
+  print(
+      "[$now] CancelNotifications! isolate=${isolateId} function='$cancelNotifications'");
   print("The ID IS =======================$id");
   print("its cancelllllllllllllllllled");
+  await Hive.initFlutter();
+  Hive.registerAdapter(NotificationsAdapter());
+  boxNotificatiBox = await Hive.openBox<Notifications>('userBox');
+  try {
+    await boxNotificatiBox
+        .delete(id)
+        .then((value) => print("§§§§§§§§§§§§§§§§§The deletion Complte"));
+  } on Exception catch (e) {
+    // TODO
+  }
 }
 
 @pragma('vm:entry-point')

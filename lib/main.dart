@@ -12,7 +12,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'hive_boxes.dart';
 import 'notifications/model/notifications.dart';
 
-late SharedPreferences prefs;
+late Box boxNotificatiBox;
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -20,7 +20,7 @@ main() async {
   );
   initServices();
   await hiveInit();
-  boxNotifications = await Hive.openBox<Notifications>('userBox');
+   Box boxNotificatiBox = await Hive.openBox<Notifications>('userBox');
   tz.initializeTimeZones();
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
