@@ -18,7 +18,7 @@ class _MyDialogState extends State<MyDialog> {
   // Now create the list with the instances
   List<DateTime> datetimes = [];
   int repeat = 1;
-
+  @override
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -83,7 +83,6 @@ class _MyDialogState extends State<MyDialog> {
             //     body: item.body,
             //     scheduledNotificationDateTime: item.time);
             for (int i = 0; i < datetimes.length; i++) {
-              
               int id = item.key + i;
               print("$id");
               scheduledSpecificPeriodicNotificationDaily(
@@ -91,8 +90,8 @@ class _MyDialogState extends State<MyDialog> {
                   id: id,
                   title: item.title,
                   body: item.body,
-                  dateBegin: datetimes[i]
-                  dateEnd: put the date of the end here );
+                  dateBegin: datetimes[i],
+                  dateEnd: DateTime(2024, 3, 15, 13, 8, 0));
               print("########################");
             }
 

@@ -1,15 +1,23 @@
+import 'dart:isolate';
+import 'dart:math';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_map_essay/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+
 late AndroidNotificationChannel channel;
 // Initialize local notifications
-void initializeNotification() {
+void initializeNotification() async {
+  await AndroidAlarmManager.initialize();
+
   flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()!
@@ -32,6 +40,11 @@ void initializeNotification() {
     onDidReceiveBackgroundNotificationResponse: notificationResponse,
     onDidReceiveNotificationResponse: notificationResponse,
   );
+  // flutterLocalNotificationsPluginCancel.initialize(
+  //   initializationSettings,
+  //   onDidReceiveBackgroundNotificationResponse: notificationCancel,
+  //   onDidReceiveNotificationResponse: notificationCancel,
+  // );
 }
 
 // Callback for receiving local notifications
@@ -156,21 +169,53 @@ Future<void> scheduledSpecificPeriodicNotificationDaily({
         .toString(), // Store dateEnd in payload to be used for cancellation
   );
 
+  try {
+    AndroidAlarmManager.oneShotAt(
+      dateEnd,
+      id,
+      cancelNotifications, // Pass a function reference
+      wakeup: true,
+      exact: true,
+      allowWhileIdle: true,
+    );
+  } on Exception catch (e) {
+    print("fffffffffff" + e.toString());
+  }
+  print(
+      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${dateEnd.difference(dateBegin).toString()}');
+
   // Schedule cancellation after dateEnd
-  tz.TZDateTime scheduledTime = tz.TZDateTime.from(dateEnd, tz.local);
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    id,
-    '',
-    '',
-    scheduledTime.add(Duration(seconds: 1)), // Schedule 1 second after dateEnd
-    NotificationDetails(),
-    androidAllowWhileIdle: true,
-    uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-    matchDateTimeComponents: DateTimeComponents.time,
-    payload:
-        'cancel', // Use a different payload to identify cancellation notification
-  );
+  // tz.TZDateTime scheduledTime = tz.TZDateTime.from(dateEnd, tz.local);
+  // await flutterLocalNotificationsPluginCancel.zonedSchedule(
+  //   id,
+  //   '',
+  //   '',
+  //   scheduledTime.add(Duration(seconds: 1)), // Schedule 1 second after dateEnd
+  //   NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       'your channel id',
+  //       'your channel name',
+  //       actions: [
+  //         const AndroidNotificationAction(
+  //           'Cancel',
+  //           'Cancel',
+  //           showsUserInterface: true,
+  //         ),
+  //       ],
+  //       channelDescription: 'your channel description',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       timeoutAfter: timeoutAfterMilliseconds,
+  //       tag: tag,
+  //     ),
+  //   ),
+  //   androidAllowWhileIdle: true,
+  //   uiLocalNotificationDateInterpretation:
+  //       UILocalNotificationDateInterpretation.absoluteTime,
+  //   matchDateTimeComponents: DateTimeComponents.time,
+  //   payload:
+  //       'cancel', // Use a different payload to identify cancellation notification
+  // );
 }
 
 Future<void> schedulePeriodicNotifications(
@@ -198,3 +243,31 @@ Future<NotificationDetails> notificationDetails() async {
 }
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+// @pragma('vm:entry-point')
+// Future<void> notificationCancel(NotificationResponse details) async {
+//   int id = prefs.getInt("id") ?? 0;
+//   if (details.actionId == "Cancel") {
+//     // Route to page when "accept" action is clicked
+//     await flutterLocalNotificationsPlugin.cancel(
+//       id,
+//     );
+//   }
+// }
+
+@pragma('vm:entry-point')
+void cancelNotifications(int id) {
+  final DateTime now = DateTime.now();
+  final int isolateId = Isolate.current.hashCode;
+  flutterLocalNotificationsPlugin.cancel(id);
+  print("[$now] CancelNotifications! isolate=${isolateId} function='$cancelNotifications'");
+  print("The ID IS =======================$id");
+  print("its cancelllllllllllllllllled");
+}
+
+@pragma('vm:entry-point')
+void printHello(int id) {
+  final DateTime now = DateTime.now();
+  final int isolateId = Isolate.current.hashCode;
+  print("[$now] Hello, world! isolate=${isolateId} function='$printHello'");
+  print("The ID IS =======================$id");
+}

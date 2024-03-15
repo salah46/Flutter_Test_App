@@ -7,10 +7,12 @@ import 'package:flutter_map_essay/local_notification.dart';
 import 'package:flutter_map_essay/notifications/screen/notificationscreen.dart';
 import 'package:flutter_map_essay/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'hive_boxes.dart';
 import 'notifications/model/notifications.dart';
 
+late SharedPreferences prefs;
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -20,7 +22,7 @@ main() async {
   await hiveInit();
   boxNotifications = await Hive.openBox<Notifications>('userBox');
   tz.initializeTimeZones();
-  
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(const MyApp());
 }

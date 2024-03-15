@@ -48,6 +48,8 @@ dependencies:
   firebase_messaging: 
   googleapis_auth: ^1.4.1
   http: ^0.13.6
+  shared_preferences: 
+  android_alarm_manager_plus: 
 
 dev_dependencies:
   hive_generator:
