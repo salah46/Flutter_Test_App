@@ -121,7 +121,7 @@ Future scheduleNotification({
 tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
   final tz.Location timeZone =
       tz.getLocation('Africa/Algiers'); // Use Algiers time zone
-  final tz.TZDateTime now = tz.TZDateTime.now(timeZone);
+  //final tz.TZDateTime now = tz.TZDateTime.now(timeZone);
   tz.TZDateTime scheduleDate = tz.TZDateTime(
     timeZone,
     scheduledNotificationDateTime.year,
@@ -131,63 +131,65 @@ tz.TZDateTime _convertTime(DateTime scheduledNotificationDateTime) {
     scheduledNotificationDateTime.minute,
   );
 
-  if (scheduleDate.isBefore(now)) {
-    scheduleDate = scheduleDate.add(const Duration(days: 1));
-  }
+  // if (scheduleDate.isBefore(now)) {
+  //   scheduleDate = scheduleDate.add(const Duration(days: 1));
+  // }
   print('The scheduled time is: ${scheduleDate}');
   return scheduleDate;
 }
 
 Future<void> scheduledSpecificPeriodicNotificationDaily({
-  required int id,
   required String title,
   required String body,
-  required String tag,
   required DateTime dateBegin,
   required DateTime dateEnd,
 }) async {
-  // Calculate timeoutAfter to be a reasonable duration after the notification is displayed
-  int timeoutAfterMilliseconds = dateEnd.difference(dateBegin).inMilliseconds;
-
-  await flutterLocalNotificationsPlugin.zonedSchedule(
-    id,
-    title,
-    body,
-    _convertTime(dateBegin),
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        'your channel id',
-        'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        timeoutAfter: timeoutAfterMilliseconds,
-        tag: tag,
+  // Calculate the difference in days between dateBegin and dateEnd
+  int differenceInDays = dateEnd.difference(dateBegin).inDays;
+  print("Deffrence in days ==$differenceInDays");
+  for (var i = 0; i <= differenceInDays; i++) {
+    var scheduledTime = dateBegin.add(Duration(days: i));
+    // Use hash code as the ID
+    int uniqueId = scheduledTime.hashCode;
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      uniqueId,
+      title,
+      body,
+      _convertTime(scheduledTime),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
       ),
-    ),
-    androidAllowWhileIdle: true,
-    uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-    matchDateTimeComponents: DateTimeComponents.time,
-    payload: dateEnd
-        .toString(), // Store dateEnd in payload to be used for cancellation
-  );
-
-  try {
-    AndroidAlarmManager.oneShotAt(
-      dateEnd,
-      id,
-      cancelNotifications, // Pass a function reference
-      wakeup: true,
-      exact: true,
-      allowWhileIdle: true,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      payload: scheduledTime
+          .toString(), // Store dateEnd in payload to be used for cancellation
     );
-  } on Exception catch (e) {
-    print("fffffffffff" + e.toString());
   }
-  print(
-      '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${dateEnd.difference(dateBegin).toString()}');
+  //"""AndroidAlarmManager make the code exe even in termiated state ,work only in Android  platfrom""
+  // try {
+  //   AndroidAlarmManager.oneShotAt(
+  //     dateEnd,
+  //     id,
+  //     cancelNotifications, // Pass a function reference
+  //     wakeup: true,
+  //     exact: true,
+  //     allowWhileIdle: true,
+  //   );
+  // } on Exception catch (e) {
+  //   print("fffffffffff" + e.toString());
+  // }
+  // print(
+  //     '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${dateEnd.difference(dateBegin).toString()}');
 
+  //################################################################################################
   // Schedule cancellation after dateEnd
   // tz.TZDateTime scheduledTime = tz.TZDateTime.from(dateEnd, tz.local);
   // await flutterLocalNotificationsPluginCancel.zonedSchedule(

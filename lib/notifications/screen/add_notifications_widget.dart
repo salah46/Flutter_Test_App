@@ -76,7 +76,7 @@ class _MyDialogState extends State<MyDialog> {
             Notifications item =
                 Notifications(title: text1, body: text2, times: datetimes);
             Navigator.of(context).pop();
-            await boxNotifications.put(boxNotifications.length * 4, item);
+            await boxNotifications.put(boxNotifications.length +1, item);
             // scheduleNotification(
             //     id: int.parse(item.key.toString()),
             //     title: item.title,
@@ -86,12 +86,10 @@ class _MyDialogState extends State<MyDialog> {
               int id = item.key + i;
               print("$id");
               scheduledSpecificPeriodicNotificationDaily(
-                  tag: "${item.key}_$i",
-                  id: id,
                   title: item.title,
                   body: item.body,
                   dateBegin: datetimes[i],
-                  dateEnd: DateTime(2024, 3, 15, 17, 23, 0));
+                  dateEnd: DateTime(2024, 3, 20, 17, 45, 0));
               print("########################");
             }
 
