@@ -1,1 +1,2 @@
-*.dart linguist-language=Flutter
+* linguist-vendored
+*.dart linguist-vendored=false
