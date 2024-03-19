@@ -42,7 +42,11 @@ Once the app is running, you can explore the features listed above:
 ## Contribution
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Contributions are welcome! If you find any bugs or have suggestions for improvement, please feel free to open an issue or submit a pull request.
 =======
 Contributions are welcome! If you find any bugs or have suggestions for improvement, please feel free to open an issue or submit a pull request.
 >>>>>>> d854507dc97d93ea10aba5127acfd6f8d1a15051
+=======
+Contributions are welcome! If you find any bugs or have suggestions for improvement, please feel free to open an issue or submit a pull request.
+>>>>>>> 0d806459312e2871ae1a46de35d2b3dd60866a83
